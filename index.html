@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <!-- Configurações rígidas de Viewport para dispositivos móveis para evitar zoom acidental e lags -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Hip Dog Run - Campeão da Mobilidade</title>
+  
+  <!-- Fontes Premium do Google: Outfit (Moderna/Sleek) e Quicksand (Arredondada/Amigável) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="appContainer">
+    <div id="gameConsole">
+      <!-- HUD do Jogo (Heads-up Display) -->
+      <div id="hud">
+        <div class="hud-group">
+          <!-- Indicador de Vida -->
+          <div class="hud-item" id="hudLife">
+            <span class="hud-icon beating">❤️</span>
+            <div class="life-bar-container">
+              <div id="lifeBar" style="width: 100%;"></div>
+            </div>
+            <span id="lifeText">100%</span>
+          </div>
+          
+          <!-- Indicador de Estágio (Nível) -->
+          <div class="hud-item" id="hudStage">
+            <span class="hud-icon stage-icon">🐾</span>
+            <div class="stage-info">
+              <span id="stageLabel">Nível:</span>
+              <span id="stageValue">Filhote</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hud-group">
+          <!-- Indicador de Pontos -->
+          <div class="hud-item" id="hudScore">
+            <span class="hud-icon">⭐</span>
+            <div class="score-info">
+              <span class="label">PONTOS</span>
+              <span id="scoreValue">0000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Container do Canvas Principal -->
+      <div id="canvasContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <!-- Efeito de Tela de Dano (Pisca vermelho ao colidir com item ruim) -->
+        <div id="damageFlash"></div>
+      </div>
+
+      <!-- ================= SCREEN OVERLAYS (GLASSMORPHISM) ================= -->
+      
+      <!-- 1. MENU INICIAL -->
+      <div id="startOverlay" class="overlay active">
+        <div class="glass-panel">
+          <div class="cover-image-container">
+            <!-- Imagem de capa premium gerada -->
+            <img src="hip_dog_run_cover.png" alt="Hip Dog Run" id="coverImage" onerror="this.style.display='none'">
+          </div>
+          <h1 class="game-title">Hip Dog <span class="accent">Run</span></h1>
+          <p class="game-subtitle">Ajude o seu amiguinho a correr saudável e se tornar um Campeão da Mobilidade!</p>
+          
+          <div class="instructions-grid">
+            <div class="instruction-box positive">
+              <h3>Pegue (Saúde ✅)</h3>
+              <div class="item-list">
+                <span>🟢 Controle de Peso</span>
+                <span>🟢 Exercícios Moderados</span>
+                <span>🟢 Fisioterapia & Natação</span>
+                <span>🟢 Consulta Veterinária</span>
+              </div>
+            </div>
+            
+            <div class="instruction-box negative">
+              <h3>Evite (Perigo ❌)</h3>
+              <div class="item-list">
+                <span>🔴 Obesidade & Sedentarismo</span>
+                <span>🔴 Exercício Excessivo</span>
+                <span>🔴 Saltos Repetitivos</span>
+                <span>🔴 Piso Escorregadio</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="control-tip">📱 Toque em qualquer lugar da tela para Pular!</p>
+          
+          <button id="btnStart" class="btn btn-primary">INICIAR JOGO</button>
+        </div>
+      </div>
+
+      <!-- 2. CARD DE EVOLUÇÃO (LEVEL UP) -->
+      <div id="levelUpOverlay" class="overlay">
+        <div class="glass-panel text-center">
+          <div class="level-up-badge">✨ EVOLUÇÃO ✨</div>
+          <h2 id="newLevelTitle">Cachorro evoluiu para...</h2>
+          <div class="dog-evolution-graphic">
+            <span id="evolutionEmoji" style="font-size: 5rem;">🐕</span>
+          </div>
+          
+          <div class="educational-card">
+            <h3>Dica de Mobilidade Articular:</h3>
+            <p id="educationalMessage">Mensagem educativa...</p>
+          </div>
+
+          <button id="btnContinue" class="btn btn-primary">CONTINUAR CORRIDA 🐾</button>
+        </div>
+      </div>
+
+      <!-- 3. GAME OVER -->
+      <div id="gameOverOverlay" class="overlay">
+        <div class="glass-panel text-center">
+          <h2 class="game-over-title">Fim da Corrida 💔</h2>
+          <p class="game-over-desc">As articulações do seu cãozinho precisam de cuidados especiais.</p>
+          
+          <div class="stats-recap">
+            <div class="recap-item">
+              <span class="recap-label">PONTUAÇÃO</span>
+              <span id="recapScore" class="recap-val">0</span>
+            </div>
+            <div class="recap-item">
+              <span class="recap-label">NÍVEL ALCANÇADO</span>
+              <span id="recapLevel" class="recap-val">Filhote</span>
+            </div>
+          </div>
+
+          <div class="educational-card text-left">
+            <h3>💡 Sabia que...</h3>
+            <p id="gameOverTip">Dica de prevenção sobre a displasia articular...</p>
+          </div>
+
+          <button id="btnRestart" class="btn btn-secondary">JOGAR NOVAMENTE 🔄</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

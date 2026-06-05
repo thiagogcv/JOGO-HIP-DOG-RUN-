@@ -1,0 +1,605 @@
+/* ================= style.css - Hip Dog Run ================= */
+
+/* 1. RESET E ESTILOS GLOBAIS */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-user-select: none; /* Desativa seleção de texto no mobile */
+  user-select: none;
+  -webkit-tap-highlight-color: transparent; /* Remove brilho cinza ao tocar no mobile */
+}
+
+:root {
+  --font-title: 'Outfit', sans-serif;
+  --font-body: 'Quicksand', sans-serif;
+  
+  /* Cores Premium e Harmoniosas */
+  --bg-app: #090d16;
+  --bg-console: #111827;
+  --glass-bg: rgba(17, 24, 39, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  
+  --primary: #f59e0b; /* Amarelo ouro para destaques */
+  --secondary: #3b82f6; /* Azul para veterinária / fisioterapia */
+  --success: #10b981; /* Verde menta para itens bons */
+  --danger: #ef4444; /* Vermelho coral para perigos */
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  
+  --shadow-neon: 0 0 15px rgba(245, 158, 11, 0.35);
+  --shadow-glass: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  height: 100vh;
+  height: 100dvh; /* Altura dinâmica do viewport para mobile */
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 2. CONTAINER DO CONSOLE DE JOGO */
+#appContainer {
+  width: 100%;
+  height: 100%;
+  max-width: 800px;
+  max-height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+#gameConsole {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-console);
+  border-radius: 24px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3. DESIGN DO HUD (HEADS-UP DISPLAY) */
+#hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  background: rgba(17, 24, 39, 0.85);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: 10;
+}
+
+.hud-group {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.hud-item {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-family: var(--font-title);
+  font-weight: 600;
+}
+
+.hud-icon {
+  margin-right: 8px;
+  font-size: 1.2rem;
+}
+
+/* Animação de batimento para o coração de vida */
+.beating {
+  animation: beat 1s infinite alternate;
+}
+@keyframes beat {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.15); }
+}
+
+/* Barra de Vida */
+.life-bar-container {
+  width: 80px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-right: 8px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+}
+
+#lifeBar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--danger) 0%, #f43f5e 100%);
+  border-radius: 6px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+}
+
+#lifeText {
+  font-size: 0.85rem;
+  min-width: 32px;
+  text-align: right;
+}
+
+/* Informações do Nível */
+.stage-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+#stageLabel {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+#stageValue {
+  font-size: 0.9rem;
+  color: var(--primary);
+  text-shadow: 0 0 5px rgba(245,158,11,0.3);
+}
+
+/* Informações dos Pontos */
+.score-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.1;
+}
+
+.score-info .label {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+#scoreValue {
+  font-size: 1.1rem;
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+
+/* 4. CANVAS E TELA DE JOGO */
+#canvasContainer {
+  flex-grow: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #1e293b; /* Fallback de fundo do canvas */
+}
+
+#gameCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Efeito de Flash de Dano */
+#damageFlash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(239, 68, 68, 0.3);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+  z-index: 5;
+}
+
+/* 5. OVERLAYS DE VIDRO (GLASSMORPHISM) */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(8, 12, 22, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.30s ease;
+  z-index: 100;
+  padding: 15px;
+}
+
+.overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-glass);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 580px;
+  max-height: 90%;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 6. CONTEÚDO DOS MENUS */
+.cover-image-container {
+  width: 100%;
+  max-height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+#coverImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.game-title {
+  font-family: var(--font-title);
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.game-title .accent {
+  color: var(--primary);
+  text-shadow: var(--shadow-neon);
+}
+
+.game-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 15px;
+  max-width: 420px;
+  line-height: 1.4;
+}
+
+/* Grid de instruções para itens bons e ruins */
+.instructions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.instruction-box {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.instruction-box h3 {
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+.instruction-box.positive h3 { color: var(--success); }
+.instruction-box.negative h3 { color: var(--danger); }
+
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.72rem;
+  color: var(--text-main);
+}
+
+.control-tip {
+  font-size: 0.8rem;
+  color: var(--primary);
+  margin-bottom: 15px;
+  font-weight: bold;
+  animation: pulse 1.5s infinite;
+  text-align: center;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* BOTÕES PREMIUM */
+.btn {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 12px 32px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  max-width: 240px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, #ea580c 100%);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, var(--secondary) 0%, #2563eb 100%);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary:active {
+  transform: scale(0.95);
+}
+
+/* Card Educativo */
+.educational-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 4px solid var(--primary);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 15px 0;
+  width: 100%;
+  max-width: 480px;
+  text-align: left;
+  border-top: 1px solid rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  border-right: 1px solid rgba(255,255,255,0.03);
+}
+
+.educational-card h3 {
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.educational-card p {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--text-main);
+}
+
+/* Painel de Evolução */
+.level-up-badge {
+  font-family: var(--font-title);
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+  border: 1px solid var(--success);
+  padding: 4px 12px;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+#newLevelTitle {
+  font-family: var(--font-title);
+  font-size: 1.6rem;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.dog-evolution-graphic {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  box-shadow: inset 0 0 15px rgba(255,255,255,0.05);
+}
+
+/* Painel de Game Over */
+.game-over-title {
+  font-family: var(--font-title);
+  font-size: 2.2rem;
+  color: var(--danger);
+  font-weight: 800;
+  margin-bottom: 4px;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+}
+
+.game-over-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 15px;
+}
+
+.stats-recap {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.recap-item {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255,255,255,0.03);
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+  min-width: 120px;
+}
+
+.recap-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.recap-val {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+
+/* 7. RESPONSIVIDADE E AJUSTES DE TELA PARA MÓVEL */
+
+/* Para telas muito pequenas (modo retrato em alguns celulares antigos) */
+@media (max-width: 480px) {
+  #appContainer {
+    padding: 0;
+  }
+  
+  #gameConsole {
+    border-radius: 0;
+    border: none;
+  }
+  
+  #hud {
+    padding: 8px 12px;
+  }
+  
+  .hud-item {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+  }
+  
+  .hud-icon {
+    font-size: 1rem;
+    margin-right: 4px;
+  }
+
+  .life-bar-container {
+    width: 50px;
+  }
+  
+  .glass-panel {
+    max-height: 95%;
+    padding: 15px;
+  }
+  
+  .game-title {
+    font-size: 1.6rem;
+  }
+  
+  .instructions-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .recap-item {
+    min-width: 90px;
+    padding: 6px 10px;
+  }
+  
+  .recap-val {
+    font-size: 1.1rem;
+  }
+}
+
+/* Ajustes de orientação paisagem em celulares */
+@media (max-height: 420px) {
+  #appContainer {
+    padding: 0;
+  }
+  
+  #gameConsole {
+    border-radius: 0;
+    border: none;
+  }
+  
+  #hud {
+    padding: 6px 15px;
+  }
+  
+  .cover-image-container {
+    display: none; /* Esconde imagem de capa no landscape curto para economizar espaço */
+  }
+  
+  .glass-panel {
+    padding: 10px 20px;
+    max-height: 98%;
+  }
+  
+  .game-title {
+    font-size: 1.4rem;
+    margin-bottom: 2px;
+  }
+  
+  .game-subtitle {
+    margin-bottom: 8px;
+    font-size: 0.75rem;
+  }
+  
+  .instructions-grid {
+    margin-bottom: 8px;
+    gap: 10px;
+  }
+  
+  .educational-card {
+    margin: 8px 0;
+    padding: 8px 12px;
+  }
+  
+  .control-tip {
+    margin-bottom: 8px;
+    font-size: 0.75rem;
+  }
+  
+  .btn {
+    padding: 8px 24px;
+    font-size: 0.85rem;
+  }
+  
+  .dog-evolution-graphic {
+    width: 60px;
+    height: 60px;
+  }
+  
+  #evolutionEmoji {
+    font-size: 2.8rem !important;
+  }
+  
+  #newLevelTitle {
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+  }
+}
