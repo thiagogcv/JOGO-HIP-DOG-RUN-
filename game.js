@@ -625,6 +625,7 @@ class GameEngine {
     this.spawnTimer = 0;
     
     this.updateHUD();
+    this.scoreVal.textContent = '0000';
     sounds.playCollect();
   }
 
@@ -641,7 +642,21 @@ class GameEngine {
   restartGame(e) {
     if (e) e.stopPropagation();
     this.gameOverOverlay.classList.remove('active');
-    this.startGame();
+    
+    // Reseta o estado do jogo e retorna para o menu inicial (fase Filhote)
+    this.state = 'START';
+    this.score = 0;
+    this.life = 100;
+    this.speed = 3.8;
+    this.stage = 'Filhote';
+    this.dog.stage = 'Filhote';
+    this.items = [];
+    this.particles = [];
+    this.spawnTimer = 0;
+    
+    this.updateHUD();
+    this.scoreVal.textContent = '0000';
+    this.startOverlay.classList.add('active');
   }
 
   handleActionInput(e) {
@@ -739,6 +754,11 @@ class GameEngine {
     if (this.shakeDuration > 0) {
       this.shakeDuration--;
     }
+
+    // 9. Verificar condição de vitória (máximo de 1000 pontos)
+    if (this.score >= 1000) {
+      this.triggerGameOver(true);
+    }
   }
 
   // Tratamento de colisões com os itens
@@ -775,7 +795,7 @@ class GameEngine {
 
     // Testar se morreu
     if (this.life <= 0) {
-      this.triggerGameOver();
+      this.triggerGameOver(false);
     }
   }
 
@@ -860,17 +880,42 @@ class GameEngine {
     this.stageVal.textContent = this.stage;
   }
 
-  triggerGameOver() {
+  triggerGameOver(isVictory = false) {
     this.state = 'GAME_OVER';
+    
+    const titleEl = document.querySelector('.game-over-title');
+    const descEl = document.querySelector('.game-over-desc');
+    const tipTitleEl = document.querySelector('.educational-card h3');
+    const tipDescEl = document.getElementById('gameOverTip');
+    
+    if (isVictory) {
+      this.score = 1000;
+      this.scoreVal.textContent = '1000';
+      
+      titleEl.innerHTML = 'Obrigado por jogar! 🏆';
+      titleEl.style.color = 'var(--primary)';
+      descEl.textContent = 'Você atingiu o limite de 1000 pontos e completou a jornada de mobilidade!';
+      
+      tipTitleEl.textContent = '🏆 Conquista Máxima';
+      tipDescEl.textContent = 'Seu cão se tornou um Campeão da Mobilidade Supremo! Continue aplicando esses cuidados de controle de peso, exercícios moderados e consultas veterinárias na vida real.';
+      
+      sounds.playLevelUp();
+    } else {
+      titleEl.innerHTML = 'Fim da Corrida 💔';
+      titleEl.style.color = 'var(--danger)';
+      descEl.textContent = 'As articulações do seu cãozinho precisam de cuidados especiais.';
+      
+      tipTitleEl.innerHTML = '💡 Sabia que...';
+      const randomTip = GAME_TIPS[Math.floor(Math.random() * GAME_TIPS.length)];
+      tipDescEl.textContent = randomTip;
+      
+      sounds.playHit();
+    }
+
     document.getElementById('recapScore').textContent = Math.floor(this.score);
     document.getElementById('recapLevel').textContent = this.stage;
-    
-    // Exibir dica educativa aleatória na tela de fim de jogo
-    const randomTip = GAME_TIPS[Math.floor(Math.random() * GAME_TIPS.length)];
-    document.getElementById('gameOverTip').textContent = randomTip;
 
     this.gameOverOverlay.classList.add('active');
-    sounds.playHit();
   }
 
   // ==========================================
