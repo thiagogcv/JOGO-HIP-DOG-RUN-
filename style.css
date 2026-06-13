@@ -648,3 +648,35 @@ body {
     margin-bottom: 6px;
   }
 }
+
+/* Layout Ampliado Sem Rolar para Menus de Vidro (Sponsor e Game Over) */
+.glass-panel-wide {
+  max-width: 720px !important;
+}
+
+.overlay-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 20px;
+  width: 100%;
+  text-align: left;
+  align-items: start;
+}
+
+.overlay-grid-start {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 20px;
+  width: 100%;
+  align-items: start;
+}
+
+@media (max-width: 600px) {
+  .overlay-grid, .overlay-grid-start {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .glass-panel-wide {
+    max-height: 98% !important;
+  }
+}

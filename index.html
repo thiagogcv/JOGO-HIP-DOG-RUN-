@@ -69,54 +69,52 @@
 
       <!-- 1. MENU INICIAL -->
       <div id="startOverlay" class="overlay active">
-        <div class="glass-panel">
-          <div class="cover-image-container">
-            <!-- Imagem de capa premium gerada -->
-            <img src="hip_dog_run_cover.png" alt="Hip Dog Run" id="coverImage" onerror="this.style.display='none'">
-          </div>
-          <h1 class="game-title">Hip Dog <span class="accent">Run</span></h1>
-          <p class="game-subtitle">Ajude o seu amiguinho a correr saudável e se tornar um Campeão da Mobilidade!</p>
-
-          <div class="instructions-grid">
-            <div class="instruction-box positive">
-              <h3>Pegue (Saúde ✅)</h3>
-              <div class="item-list">
-                <span>🟢 Controle de Peso</span>
-                <span>🟢 Exercícios Moderados</span>
-                <span>🟢 Fisioterapia & Natação</span>
-                <span>🟢 Consulta Veterinária</span>
+        <div class="glass-panel glass-panel-wide">
+          <div class="overlay-grid-start">
+            
+            <!-- Coluna Esquerda: Título, Capa e Iniciar -->
+            <div style="display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center; width: 100%;">
+              <div class="cover-image-container" style="max-height: 95px; margin-bottom: 0;">
+                <img src="hip_dog_run_cover.png" alt="Hip Dog Run" id="coverImage" onerror="this.style.display='none'">
+              </div>
+              <h1 class="game-title" style="font-size: 1.8rem; margin-bottom: 0; margin-top: 4px;">Hip Dog <span class="accent">Run</span></h1>
+              <p class="game-subtitle" style="margin-bottom: 0; font-size: 0.75rem; line-height: 1.3;">Ajude o seu amiguinho a correr saudável e se tornar um Campeão da Mobilidade!</p>
+              <button id="btnStart" class="btn btn-primary" style="max-width: 100%; margin-top: 6px; padding: 10px 24px; font-size: 0.9rem;">INICIAR JOGO</button>
+            </div>
+            
+            <!-- Coluna Direita: Instruções, Dica e Patrocínio -->
+            <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+              <div class="instructions-grid" style="grid-template-columns: 1fr; gap: 6px; margin-bottom: 0;">
+                <div class="instruction-box positive" style="padding: 4px 8px;">
+                  <h3 style="font-size: 0.7rem; margin-bottom: 2px;">Pegue (Saúde ✅)</h3>
+                  <div class="item-list" style="font-size: 0.65rem; gap: 1px;">
+                    <span>🟢 Controle de Peso, Ex. Moderado</span>
+                    <span>🟢 Fisioterapia, Natação & Consulta Vet</span>
+                  </div>
+                </div>
+                <div class="instruction-box negative" style="padding: 4px 8px;">
+                  <h3 style="font-size: 0.7rem; margin-bottom: 2px;">Evite (Perigo ❌)</h3>
+                  <div class="item-list" style="font-size: 0.65rem; gap: 1px;">
+                    <span>🔴 Obesidade, Sedentarismo, Ex. Excessivo</span>
+                    <span>🔴 Saltos Repetitivos & Piso Escorregadio</span>
+                  </div>
+                </div>
+              </div>
+              
+              <p class="control-tip" style="margin-bottom: 0; font-size: 0.75rem;">📱 Toque em qualquer lugar da tela para Pular!</p>
+              
+              <!-- Patrocínio & Créditos -->
+              <div class="sponsor-footer" style="margin-top: 4px; display: flex; flex-direction: column; align-items: center; gap: 4px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 6px; width: 100%;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <img src="spark_logo.jpg" alt="Spark Technologies Logo" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); border: 1px solid rgba(255,255,255,0.1);">
+                  <span style="font-family: 'Outfit', sans-serif; font-size: 0.75rem; font-weight: 700; color: #fff;">Spark Technologies</span>
+                </div>
+                <p style="font-size: 0.68rem; color: var(--text-muted); margin: 0; text-align: center;">
+                  Desenvolvido por: <a href="https://sparktechnologies.pt" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; border-bottom: 1px dashed var(--primary);">Spark Technologies</a>
+                </p>
               </div>
             </div>
-
-            <div class="instruction-box negative">
-              <h3>Evite (Perigo ❌)</h3>
-              <div class="item-list">
-                <span>🔴 Obesidade & Sedentarismo</span>
-                <span>🔴 Exercício Excessivo</span>
-                <span>🔴 Saltos Repetitivos</span>
-                <span>🔴 Piso Escorregadio</span>
-              </div>
-            </div>
-          </div>
-
-          <p class="control-tip">📱 Toque em qualquer lugar da tela para Pular!</p>
-
-          <button id="btnStart" class="btn btn-primary">INICIAR JOGO</button>
-
-          <!-- Patrocínio & Créditos -->
-          <div class="sponsor-footer"
-            style="margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px; width: 100%;">
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <img src="spark_logo.jpg" alt="Spark Technologies Logo"
-                style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); border: 1px solid rgba(255,255,255,0.1);">
-              <span style="font-family: 'Outfit', sans-serif; font-size: 0.8rem; font-weight: 700; color: #fff;">Spark
-                Technologies</span>
-            </div>
-            <p style="font-size: 0.72rem; color: var(--text-muted); margin: 0;">
-              Desenvolvido por: <a href="https://sparktechnologies.pt" target="_blank"
-                style="color: var(--primary); text-decoration: none; font-weight: bold; border-bottom: 1px dashed var(--primary);">Spark
-                Technologies</a>
-            </p>
+            
           </div>
         </div>
       </div>
@@ -141,44 +139,50 @@
 
       <!-- 3. GAME OVER -->
       <div id="gameOverOverlay" class="overlay">
-        <div class="glass-panel text-center">
-          <h2 class="game-over-title">Fim da Corrida 💔</h2>
-          <p class="game-over-desc">As articulações do seu cãozinho precisam de cuidados especiais.</p>
+        <div class="glass-panel glass-panel-wide text-center">
+          <div class="overlay-grid">
+            
+            <!-- Coluna Esquerda: Placar e Ação -->
+            <div style="display: flex; flex-direction: column; gap: 10px; height: 100%; justify-content: space-between; width: 100%;">
+              <div>
+                <h2 class="game-over-title" style="margin: 0; font-size: 1.8rem;">Fim da Corrida 💔</h2>
+                <p class="game-over-desc" style="margin: 4px 0 10px 0; font-size: 0.82rem; line-height: 1.3;">As articulações do seu cãozinho precisam de cuidados especiais.</p>
+              </div>
+              
+              <div class="stats-recap" style="margin: 0; display: flex; gap: 12px; width: 100%;">
+                <div class="recap-item" style="min-width: 90px; padding: 6px 12px; flex: 1;">
+                  <span class="recap-label" style="font-size: 0.6rem;">PONTUAÇÃO</span>
+                  <span id="recapScore" class="recap-val" style="font-size: 1.2rem;">0</span>
+                </div>
+                <div class="recap-item" style="min-width: 90px; padding: 6px 12px; flex: 1;">
+                  <span class="recap-label" style="font-size: 0.6rem;">NÍVEL ALCANÇADO</span>
+                  <span id="recapLevel" class="recap-val" style="font-size: 1.1rem;">Filhote</span>
+                </div>
+              </div>
 
-          <div class="stats-recap">
-            <div class="recap-item">
-              <span class="recap-label">PONTUAÇÃO</span>
-              <span id="recapScore" class="recap-val">0</span>
+              <button id="btnRestart" class="btn btn-secondary" style="max-width: 100%; margin: 6px 0 0 0; padding: 10px 24px; font-size: 0.9rem;">JOGAR NOVAMENTE 🔄</button>
             </div>
-            <div class="recap-item">
-              <span class="recap-label">NÍVEL ALCANÇADO</span>
-              <span id="recapLevel" class="recap-val">Filhote</span>
+            
+            <!-- Coluna Direita: Dica Educativa e Patrocínio -->
+            <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+              <div class="educational-card text-left" style="margin: 0; max-width: 100%; padding: 8px 12px; border-radius: 8px;">
+                <h3 style="font-size: 0.78rem; margin-bottom: 2px;">💡 Sabia que...</h3>
+                <p id="gameOverTip" style="font-size: 0.74rem; line-height: 1.3; color: var(--text-main);">Dica de prevenção sobre a displasia articular...</p>
+              </div>
+
+              <!-- Patrocínio & Créditos -->
+              <div class="sponsor-footer" style="display: flex; flex-direction: column; align-items: center; gap: 4px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px; width: 100%; margin-top: 2px;">
+                <span style="font-size: 0.6rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: -2px;">Patrocínio</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <img src="spark_logo.jpg" alt="Spark Technologies Logo" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); border: 1px solid rgba(255,255,255,0.1);">
+                  <span style="font-family: 'Outfit', sans-serif; font-size: 0.78rem; font-weight: 700; color: #fff;">Spark Technologies</span>
+                </div>
+                <p style="font-size: 0.68rem; color: var(--text-muted); margin: 0; text-align: center;">
+                  Desenvolvido por: <a href="https://sparktechnologies.pt" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; border-bottom: 1px dashed var(--primary);">Spark Technologies</a>
+                </p>
+              </div>
             </div>
-          </div>
 
-          <div class="educational-card text-left">
-            <h3>💡 Sabia que...</h3>
-            <p id="gameOverTip">Dica de prevenção sobre a displasia articular...</p>
-          </div>
-
-          <button id="btnRestart" class="btn btn-secondary">JOGAR NOVAMENTE 🔄</button>
-
-          <!-- Patrocínio & Créditos -->
-          <div class="sponsor-footer"
-            style="margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px; width: 100%;">
-            <span
-              style="font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">Patrocínio</span>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <img src="spark_logo.jpg" alt="Spark Technologies Logo"
-                style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); border: 1px solid rgba(255,255,255,0.1);">
-              <span style="font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 700; color: #fff;">Spark
-                Technologies</span>
-            </div>
-            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">
-              Desenvolvido por: <a href="https://sparktechnologies.pt" target="_blank"
-                style="color: var(--primary); text-decoration: none; font-weight: bold; border-bottom: 1px dashed var(--primary);">Spark
-                Technologies</a>
-            </p>
           </div>
         </div>
       </div>
@@ -191,7 +195,7 @@
   <!-- Trilha Sonora do Jogo (Áudio do YouTube) -->
   <audio id="bgMusic" src="background_music.mp3" loop></audio>
 
-  <script src="game.js?v=7"></script>
+  <script src="game.js?v=8"></script>
 </body>
 
 </html>
