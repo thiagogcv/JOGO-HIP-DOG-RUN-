@@ -457,7 +457,7 @@ class Dog {
   _getSizeScale() {
     if (this.stage === 'Jovem') return 1.3;
     if (this.stage === 'Adulto saudável') return 1.5;
-    if (this.stage === 'Campeão da Mobilidade' || this.stage === 'Mestre da Agilidade' || this.stage === 'Lenda Canina') return 1.7;
+    if (this.stage === 'Campeão da Mobilidade' || this.stage === 'Mestre da Agilidade' || this.stage === 'Lenda Canina' || this.stage === 'Explorador da Floresta' || this.stage === 'Surfista da Praia') return 1.7;
     return 1.1; // Filhote
   }
 
@@ -514,17 +514,28 @@ class Dog {
 }
 
 // Preload Cat Sprites
-const catSprites = { walk: [], scared: [] };
+const catSprites = {
+  normal: { walk: [], scared: [] },
+  preto: { walk: [], scared: [] },
+  branco: { walk: [], scared: [] }
+};
+
 for (let i = 1; i <= 10; i++) {
-  let img = new Image();
-  img.src = `sprite/gato-andando/gato-andando (${i}).png?v=3`;
-  catSprites.walk.push(img);
+  let imgN = new Image(); imgN.src = `sprite/gato-andando/gato-andando (${i}).png?v=3`;
+  let imgP = new Image(); imgP.src = `sprite/gato-andando-preto/gato-andando (${i}).png?v=3`;
+  let imgB = new Image(); imgB.src = `sprite/gato-andando-branco/gato-andando (${i}).png?v=3`;
+  catSprites.normal.walk.push(imgN);
+  catSprites.preto.walk.push(imgP);
+  catSprites.branco.walk.push(imgB);
 }
 for (let i = 23; i <= 51; i++) {
   let num = String(i).padStart(3, '0');
-  let img = new Image();
-  img.src = `sprite/gato-assustado/ezgif-frame-${num}.png?v=3`;
-  catSprites.scared.push(img);
+  let imgN = new Image(); imgN.src = `sprite/gato-assustado/ezgif-frame-${num}.png?v=3`;
+  let imgP = new Image(); imgP.src = `sprite/gato-assustado-preto/ezgif-frame-${num}.png?v=3`;
+  let imgB = new Image(); imgB.src = `sprite/gato-assustado-branco/ezgif-frame-${num}.png?v=3`;
+  catSprites.normal.scared.push(imgN);
+  catSprites.preto.scared.push(imgP);
+  catSprites.branco.scared.push(imgB);
 }
 
 // ==========================================
@@ -556,6 +567,9 @@ class GameItem {
         this.frameIndex = 0;
         this.frameTimer = 0;
         this.isScared = false;
+        
+        const catTypes = ['normal', 'preto', 'branco'];
+        this.catColor = catTypes[Math.floor(Math.random() * catTypes.length)];
         
         // Física para pulo aleatório
         this.groundY = canvasHeight - 65;
@@ -642,7 +656,7 @@ class GameItem {
         this.isScared = true;
       }
       
-      let currentArray = this.isScared ? catSprites.scared : catSprites.walk;
+      let currentArray = this.isScared ? catSprites[this.catColor].scared : catSprites[this.catColor].walk;
       let frameSpeed = this.isScared ? 2 : 3; 
       
       if (this.frameTimer > frameSpeed) {
@@ -982,7 +996,7 @@ class GameEngine {
     if (this.stage === 'Mestre da Agilidade') speedMult = 0.004;
     
     // O multiplicador deve ser o mesmo da penúltima fase para manter a velocidade!
-    if (this.stage === 'Lenda Canina') speedMult = 0.004; 
+    if (this.stage === 'Lenda Canina' || this.stage === 'Explorador da Floresta' || this.stage === 'Surfista da Praia') speedMult = 0.004; 
 
     // Trava o score usado para o cálculo de velocidade para não ficar impossível
     // Mantém a velocidade constante a partir de 1800 pontos (mesma da penúltima fase)
@@ -1013,7 +1027,7 @@ class GameEngine {
       let baseInterval = 140;
       let minInterval = 90;
       if (this.stage === 'Mestre da Agilidade') { baseInterval = 100; minInterval = 50; }
-      if (this.stage === 'Lenda Canina') { baseInterval = 100; minInterval = 50; }
+      if (this.stage === 'Lenda Canina' || this.stage === 'Explorador da Floresta' || this.stage === 'Surfista da Praia') { baseInterval = 100; minInterval = 50; }
       this.spawnInterval = Math.max(minInterval, baseInterval - Math.floor(this.speed * 8));
     }
 
@@ -1085,8 +1099,8 @@ class GameEngine {
       }
     }
 
-    // 9. Verificar condição de vitória (máximo de 3000 pontos)
-    if (this.score >= 3000) {
+    // 9. Verificar condição de vitória (máximo de 6000 pontos)
+    if (this.score >= 6000) {
       this.triggerGameOver(true);
     }
   }
@@ -1160,7 +1174,15 @@ class GameEngine {
     let eduMsg = '';
     let hasEvolved = false;
 
-    if (this.score >= 2500 && this.stage !== 'Lenda Canina') {
+    if (this.score >= 5000 && this.stage !== 'Surfista da Praia') {
+      targetStage = 'Surfista da Praia';
+      eduMsg = "A areia exige mais das articulações, mas seu Cão Surfista está preparado! Graças aos cuidados contínuos, ele curte a praia com total saúde e energia.";
+      hasEvolved = true;
+    } else if (this.score >= 4000 && this.score < 5000 && this.stage !== 'Explorador da Floresta') {
+      targetStage = 'Explorador da Floresta';
+      eduMsg = "Desbravando trilhas e obstáculos naturais! A prevenção fez do seu cão um Explorador da Floresta imbatível e cheio de vigor.";
+      hasEvolved = true;
+    } else if (this.score >= 2500 && this.score < 4000 && this.stage !== 'Lenda Canina') {
       targetStage = 'Lenda Canina';
       eduMsg = "Uma verdadeira Lenda Canina! Seu cachorro provou que com prevenção e cuidado é possível desafiar os limites do tempo sem comprometer a saúde articular.";
       hasEvolved = true;
@@ -1197,6 +1219,9 @@ class GameEngine {
       else if (targetStage === 'Adulto saudável') evolutionEmojiEl.textContent = '🐕‍🦺';
       else if (targetStage === 'Campeão da Mobilidade') evolutionEmojiEl.textContent = '🏆';
       else if (targetStage === 'Mestre da Agilidade') evolutionEmojiEl.textContent = '⚡';
+      else if (targetStage === 'Lenda Canina') evolutionEmojiEl.textContent = '🌟';
+      else if (targetStage === 'Explorador da Floresta') evolutionEmojiEl.textContent = '🌲';
+      else if (targetStage === 'Surfista da Praia') evolutionEmojiEl.textContent = '🌊';
       else evolutionEmojiEl.textContent = '🌟';
 
       this.levelUpOverlay.classList.add('active');
@@ -1242,12 +1267,12 @@ class GameEngine {
     const tipDescEl = document.getElementById('gameOverTip');
 
     if (isVictory) {
-      this.score = 3000;
-      this.scoreVal.textContent = '3000';
+      this.score = 6000;
+      this.scoreVal.textContent = '6000';
 
-      titleEl.innerHTML = 'Obrigado por jogar! 🌟';
+      titleEl.innerHTML = 'Obrigado por jogar! 🌊';
       titleEl.style.color = 'var(--primary)';
-      descEl.textContent = 'Você atingiu o limite de 3000 pontos e completou a jornada suprema de mobilidade!';
+      descEl.textContent = 'Você atingiu o limite de 6000 pontos e completou a jornada suprema de mobilidade, até na areia da praia!';
 
       tipTitleEl.textContent = '🏆 Conquista Máxima';
       tipDescEl.textContent = 'Seu cão se tornou um Campeão da Mobilidade Supremo! Continue aplicando esses cuidados de controle de peso, exercícios moderados e consultas veterinárias na vida real.';
@@ -1359,12 +1384,22 @@ class GameEngine {
       grad.addColorStop(0, '#334155');
       grad.addColorStop(0.5, '#475569');
       grad.addColorStop(1, '#94a3b8');
-    } else {
+    } else if (this.stage === 'Lenda Canina') {
       // Tempestade Escura (Lenda Canina)
       grad.addColorStop(0, '#020617');
       grad.addColorStop(0.4, '#0f172a');
       grad.addColorStop(0.8, '#1e293b');
       grad.addColorStop(1, '#475569');
+    } else if (this.stage === 'Explorador da Floresta') {
+      // Floresta Dourada
+      grad.addColorStop(0, '#064e3b');
+      grad.addColorStop(0.5, '#047857');
+      grad.addColorStop(1, '#fef08a');
+    } else {
+      // Praia Ensolarada
+      grad.addColorStop(0, '#0ea5e9');
+      grad.addColorStop(0.5, '#38bdf8');
+      grad.addColorStop(1, '#fde047');
     }
 
     this.ctx.fillStyle = grad;
@@ -1390,9 +1425,16 @@ class GameEngine {
     } else if (this.stage === 'Mestre da Agilidade') {
       mountColor1 = 'rgba(51, 65, 85, 0.4)';
       mountColor2 = 'rgba(71, 85, 105, 0.3)';
-    } else {
+    } else if (this.stage === 'Lenda Canina') {
       mountColor1 = 'rgba(2, 6, 23, 0.5)';
       mountColor2 = 'rgba(15, 23, 42, 0.4)';
+    } else if (this.stage === 'Explorador da Floresta') {
+      mountColor1 = 'rgba(20, 83, 45, 0.5)';
+      mountColor2 = 'rgba(22, 101, 52, 0.4)';
+    } else {
+      // Praia (Ilhas distantes)
+      mountColor1 = 'rgba(8, 145, 178, 0.4)';
+      mountColor2 = 'rgba(6, 182, 212, 0.3)';
     }
 
     const midY = this.canvas.height - 65;
@@ -1436,6 +1478,12 @@ class GameEngine {
     if (this.stage === 'Campeão da Mobilidade') {
       groundGrad.addColorStop(0, '#1e293b');
       groundGrad.addColorStop(1, '#0f172a');
+    } else if (this.stage === 'Explorador da Floresta') {
+      groundGrad.addColorStop(0, '#3f6212');
+      groundGrad.addColorStop(1, '#166534');
+    } else if (this.stage === 'Surfista da Praia') {
+      groundGrad.addColorStop(0, '#fde047');
+      groundGrad.addColorStop(1, '#fef08a');
     } else {
       groundGrad.addColorStop(0, '#1e293b');
       groundGrad.addColorStop(1, '#0f172a');
@@ -1445,7 +1493,13 @@ class GameEngine {
     this.ctx.fillRect(0, y, w, groundHeight);
 
     // Linha superior de borda (grama/asfalto)
-    this.ctx.strokeStyle = this.stage === 'Campeão da Mobilidade' ? '#10b981' : '#f59e0b';
+    if (this.stage === 'Surfista da Praia') {
+      this.ctx.strokeStyle = '#eab308';
+    } else if (this.stage === 'Explorador da Floresta') {
+      this.ctx.strokeStyle = '#65a30d';
+    } else {
+      this.ctx.strokeStyle = this.stage === 'Campeão da Mobilidade' ? '#10b981' : '#f59e0b';
+    }
     this.ctx.lineWidth = 4;
     this.ctx.beginPath();
     this.ctx.moveTo(0, y);
