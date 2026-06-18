@@ -74,22 +74,27 @@ class SoundFX {
 
     const now = this.ctx.currentTime;
 
-    // Som áspero principal
+    // Som principal: Choro do cachorro ("Caim!")
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
 
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(220, now);
-    osc.frequency.linearRampToValueAtTime(80, now + 0.25);
+    osc.type = 'sine'; // Sine produz um som mais parecido com um assobio vocal/choro
+    
+    // Modulação de Frequência para imitar o "Caaa-im" (Sobe rápido, desce afinando)
+    osc.frequency.setValueAtTime(650, now);
+    osc.frequency.exponentialRampToValueAtTime(1100, now + 0.06);
+    osc.frequency.exponentialRampToValueAtTime(350, now + 0.35);
 
-    gain.gain.setValueAtTime(0.15, now);
-    gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+    // Envelope de Volume: ataque rápido e fade out progressivo
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.25, now + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start(now);
-    osc.stop(now + 0.25);
+    osc.stop(now + 0.4);
 
     // Efeito de ruído/poeira curto
     try {
@@ -543,6 +548,12 @@ for (let i = 23; i <= 51; i++) {
 const troncoImg = new Image();
 troncoImg.src = `sprite/tronco.png?v=1`;
 
+// Preload Osso e Bife
+const ossoImg = new Image();
+ossoImg.src = `sprite/app/osso.png?v=1`;
+const bifeImg = new Image();
+bifeImg.src = `sprite/app/bife.png?v=1`;
+
 // Preload Bola Sprites
 const ballSprites = [];
 const ballFrames = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
@@ -605,8 +616,8 @@ class GameItem {
         this.scale = 1.0;
       }
     } else {
-      const spawnHigh = Math.random() < 0.35;
-      this.y = spawnHigh ? canvasHeight - 130 : canvasHeight - 65;
+      const spawnHigh = data.alwaysHigh || Math.random() < 0.35;
+      this.y = spawnHigh ? canvasHeight - 220 : canvasHeight - 65;
       this.isOnRoad = false;
     }
   }
@@ -736,6 +747,18 @@ class GameItem {
         let sh = troncoImg.naturalHeight * scale;
         ctx.drawImage(troncoImg, this.x - sw / 2, this.y - sh + 20, sw, sh);
       }
+    } else if (this.name === 'Super Osso' && ossoImg && ossoImg.complete && ossoImg.naturalWidth > 0) {
+      let maxSize = 32;
+      let aspect = ossoImg.naturalWidth / ossoImg.naturalHeight;
+      let sw = aspect > 1 ? maxSize : maxSize * aspect;
+      let sh = aspect > 1 ? maxSize / aspect : maxSize;
+      ctx.drawImage(ossoImg, this.x - sw / 2, this.y - sh / 2, sw, sh);
+    } else if (this.name === 'Bife Premium' && bifeImg && bifeImg.complete && bifeImg.naturalWidth > 0) {
+      let maxSize = 34;
+      let aspect = bifeImg.naturalWidth / bifeImg.naturalHeight;
+      let sw = aspect > 1 ? maxSize : maxSize * aspect;
+      let sh = aspect > 1 ? maxSize / aspect : maxSize;
+      ctx.drawImage(bifeImg, this.x - sw / 2, this.y - sh / 2, sw, sh);
     } else {
       ctx.fillText(this.emoji, this.x, emojiY);
     }
@@ -790,6 +813,8 @@ const ITEM_POOL = [
   { name: 'Natação', emoji: '🏊', isGood: true, color: '#10b981', points: 15 },
   { name: 'Condroprotetor', emoji: '💊', isGood: true, color: '#10b981', points: 20 },
   { name: 'Consulta Vet', emoji: '🩺', isGood: true, color: '#10b981', points: 25 },
+  { name: 'Super Osso', emoji: '🦴', isGood: true, color: '#f59e0b', points: 50, alwaysHigh: true },
+  { name: 'Bife Premium', emoji: '🥩', isGood: true, color: '#f59e0b', points: 100, alwaysHigh: true },
 
   // Ruins (Perigos ❌)
   { name: 'Obesidade', emoji: '🍔', isGood: false, color: '#ef4444', penalty: 10 },
@@ -946,6 +971,11 @@ class GameEngine {
   startGame(e) {
     if (e) e.stopPropagation();
     sounds.init();
+
+    // Inicia em tela cheia e modo horizontal automaticamente
+    if (!document.fullscreenElement) {
+      this.toggleFullscreen();
+    }
 
     // Inicia a música de fundo com volume confortável (35%)
     const bgMusic = document.getElementById('bgMusic');
@@ -1213,7 +1243,11 @@ class GameEngine {
       let minInterval = 90;
       if (this.stage === 'Mestre da Agilidade') { baseInterval = 100; minInterval = 50; }
       if (this.stage === 'Lenda Canina' || this.stage === 'Explorador da Floresta' || this.stage === 'Surfista da Praia') { baseInterval = 100; minInterval = 50; }
-      this.spawnInterval = Math.max(minInterval, baseInterval - Math.floor(this.speed * 8));
+      
+      let calculatedInterval = Math.max(minInterval, baseInterval - Math.floor(this.speed * 8));
+      // Adicionar aleatoriedade de -30% a +40% no intervalo para deixar o espaçamento orgânico
+      let randomOffset = Math.floor(Math.random() * (calculatedInterval * 0.7)) - Math.floor(calculatedInterval * 0.3);
+      this.spawnInterval = Math.max(minInterval - 20, calculatedInterval + randomOffset);
     }
 
     // 6. Atualizar e colidir itens

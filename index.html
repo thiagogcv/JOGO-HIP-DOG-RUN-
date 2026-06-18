@@ -84,52 +84,9 @@
       <!-- ================= SCREEN OVERLAYS (GLASSMORPHISM) ================= -->
 
       <!-- 1. MENU INICIAL -->
-      <div id="startOverlay" class="overlay active">
-        <div class="glass-panel glass-panel-wide">
-          <div class="overlay-grid-start">
-            
-            <!-- Coluna Esquerda: Título e Iniciar -->
-            <div style="display: flex; flex-direction: column; gap: 15px; align-items: center; text-align: center; width: 100%; height: 100%; justify-content: center; padding: 10px 0;">
-              <h1 class="game-title" style="font-size: 2.2rem; margin-bottom: 0;">Hip Dog <span class="accent">Run</span></h1>
-              <p class="game-subtitle" style="margin-bottom: 0; font-size: 0.85rem; line-height: 1.4; max-width: 280px;">Ajude o seu amiguinho a correr saudável e se tornar um Campeão da Mobilidade!</p>
-              <button id="btnStart" class="btn btn-primary" style="max-width: 100%; margin-top: 5px; padding: 12px 32px; font-size: 0.95rem;">INICIAR JOGO</button>
-            </div>
-            
-            <!-- Coluna Direita: Instruções, Dica e Patrocínio -->
-            <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
-              <div class="instructions-grid" style="grid-template-columns: 1fr; gap: 6px; margin-bottom: 0;">
-                <div class="instruction-box positive" style="padding: 4px 8px;">
-                  <h3 style="font-size: 0.7rem; margin-bottom: 2px;">Pegue (Saúde ✅)</h3>
-                  <div class="item-list" style="font-size: 0.65rem; gap: 1px;">
-                    <span>🟢 Controle de Peso, Ex. Moderado</span>
-                    <span>🟢 Fisioterapia, Natação & Consulta Vet</span>
-                  </div>
-                </div>
-                <div class="instruction-box negative" style="padding: 4px 8px;">
-                  <h3 style="font-size: 0.7rem; margin-bottom: 2px;">Evite (Perigo ❌)</h3>
-                  <div class="item-list" style="font-size: 0.65rem; gap: 1px;">
-                    <span>🔴 Obesidade, Sedentarismo, Ex. Excessivo</span>
-                    <span>🔴 Saltos Repetitivos & Piso Escorregadio</span>
-                  </div>
-                </div>
-              </div>
-              
-              <p class="control-tip" style="margin-bottom: 0; font-size: 0.75rem;">📱 Toque em qualquer lugar da tela para Pular!</p>
-              
-              <!-- Patrocínio & Créditos -->
-              <div class="sponsor-footer" style="margin-top: 4px; display: flex; flex-direction: column; align-items: center; gap: 4px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 6px; width: 100%;">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                  <img src="spark_logo.jpg" alt="Spark Technologies Logo" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); border: 1px solid rgba(255,255,255,0.1);">
-                  <span style="font-family: 'Outfit', sans-serif; font-size: 0.75rem; font-weight: 700; color: #fff;">Spark Technologies</span>
-                </div>
-                <p style="font-size: 0.68rem; color: var(--text-muted); margin: 0; text-align: center;">
-                  Desenvolvido por: <a href="https://sparktechnologies.pt" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; border-bottom: 1px dashed var(--primary);">Spark Technologies</a>
-                </p>
-              </div>
-            </div>
-            
-          </div>
-        </div>
+      <div id="startOverlay" class="overlay active" style="padding: 0; background-color: #000; z-index: 200;">
+        <img src="sprite/app/banner-game.webp" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;" alt="Banner">
+        <button id="btnStart" class="btn btn-primary pulse-alert" style="position: absolute; left: 50%; top: 60%; transform: translate(-50%, -50%); padding: 15px 40px; font-size: 1.3rem; border-radius: 30px; z-index: 10;">INICIAR JOGO</button>
       </div>
 
       <!-- 2. CARD DE EVOLUÇÃO (LEVEL UP) -->
